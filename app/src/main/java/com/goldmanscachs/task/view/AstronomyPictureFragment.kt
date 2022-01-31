@@ -29,6 +29,7 @@ class AstronomyPictureFragment : Fragment() {
     private var _astronomyPictureBinding: AstronomyPictureBinding? = null
     private var datePickerDialog: DatePickerDialog? = null
     private val astronomyPictureViewModel: AstronomyPictureViewModel by viewModels()
+    private var isItemAddedToFavorite = false
 
     private val astronomyPictureBinding get() = _astronomyPictureBinding!!
 
@@ -54,13 +55,7 @@ class AstronomyPictureFragment : Fragment() {
             datePickerDialog?.show()
             false
         }
-        astronomyPictureBinding.favoriteTxt.setOnClickListener {
-            Toast.makeText(
-                requireContext(),
-                R.string.addedToFavorites,
-                Toast.LENGTH_LONG
-            ).show()
-        }
+        addedToFavourites()
     }
 
     @SuppressLint("SimpleDateFormat")
@@ -101,6 +96,7 @@ class AstronomyPictureFragment : Fragment() {
             Status.SUCCESS -> {
                 astronomyPictureBinding.progressBar.visibility = View.GONE
                 astronomyPictureBinding.scrollView.visibility = View.VISIBLE
+                astronomyPictureBinding.favoriteTxt.visibility = View.VISIBLE
                 resource.data?.let {
                     astronomyPictureBinding.titleTxtValue.text = it.title
                     astronomyPictureBinding.dateTxtValue.text = it.date
@@ -117,11 +113,13 @@ class AstronomyPictureFragment : Fragment() {
             Status.LOADING -> {
                 astronomyPictureBinding.progressBar.visibility = View.VISIBLE
                 astronomyPictureBinding.scrollView.visibility = View.GONE
+                astronomyPictureBinding.favoriteTxt.visibility = View.GONE
             }
 
             Status.ERROR -> {
                 astronomyPictureBinding.progressBar.visibility = View.GONE
                 astronomyPictureBinding.scrollView.visibility = View.GONE
+                astronomyPictureBinding.favoriteTxt.visibility = View.GONE
                 Toast.makeText(requireContext(), resource.message, Toast.LENGTH_LONG).show()
             }
         }
@@ -130,5 +128,16 @@ class AstronomyPictureFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _astronomyPictureBinding = null
+    }
+
+    private fun addedToFavourites() {
+        astronomyPictureBinding.favoriteTxt.setOnClickListener {
+            isItemAddedToFavorite = true
+            Toast.makeText(
+                requireContext(),
+                R.string.addedToFavorites,
+                Toast.LENGTH_LONG
+            ).show()
+        }
     }
 }
