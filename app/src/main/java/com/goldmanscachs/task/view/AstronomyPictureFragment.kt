@@ -10,7 +10,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.viewModels
-import androidx.recyclerview.widget.ListAdapter
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.goldmanscachs.task.R
@@ -24,10 +23,6 @@ import dagger.hilt.android.AndroidEntryPoint
 import java.text.SimpleDateFormat
 import java.util.*
 
-/**
- * A simple [Fragment] subclass as the default destination in the navigation.
- */
-
 @AndroidEntryPoint
 class AstronomyPictureFragment : Fragment() {
 
@@ -36,6 +31,12 @@ class AstronomyPictureFragment : Fragment() {
     private val astronomyPictureViewModel: AstronomyPictureViewModel by viewModels()
 
     private val astronomyPictureBinding get() = _astronomyPictureBinding!!
+
+    companion object {
+        fun getInstance(): AstronomyPictureFragment {
+            return AstronomyPictureFragment()
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -52,6 +53,13 @@ class AstronomyPictureFragment : Fragment() {
         astronomyPictureBinding.dateEditText.setOnTouchListener { _, _ ->
             datePickerDialog?.show()
             false
+        }
+        astronomyPictureBinding.favoriteTxt.setOnClickListener {
+            Toast.makeText(
+                requireContext(),
+                R.string.addedToFavorites,
+                Toast.LENGTH_LONG
+            ).show()
         }
     }
 
